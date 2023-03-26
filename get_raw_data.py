@@ -90,8 +90,8 @@ if __name__ == "__main__":
     for data in [ibm_data, apple_data]:
         for each_datapoint in data:
             sql = "INSERT INTO financial_data (symbol, date, open_price, close_price, volume) \
-            VALUES (%s, %s, %s, %s, %s) \
-            ON DUPLICATE KEY UPDATE open_price = VALUES(open_price), close_price = VALUES(close_price), volume = VALUES(volume)" % \
+            VALUES (%s, %s, %s, %s, %s) AS new_data\
+            ON DUPLICATE KEY UPDATE open_price = new_data.open_price, close_price = new_data.close_price, volume = new_data.volume" % \
             ('"' + each_datapoint['symbol'] + '"', '"' + each_datapoint['date'] + '"', each_datapoint['open_price'], each_datapoint['close_price'], each_datapoint['volume'])
             try:
                 cursor.execute(sql)

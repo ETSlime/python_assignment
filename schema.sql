@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS financial_data(
     date DATE NOT NULL,
     open_price DECIMAL(10, 2) NOT NULL,
     close_price DECIMAL(10, 2) NOT NULL,
-    volume BIGINT NOT NULL
+    volume BIGINT NOT NULL,
+    UNIQUE KEY symbol (symbol, date)
 )
