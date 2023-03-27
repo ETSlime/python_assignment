@@ -4,6 +4,8 @@ import pymysql
 import json
 from datetime import datetime, timedelta
 import os
+from dotenv import load_dotenv
+import cryptography
 
 """
 Retrieve and process the row data from the Alpha Vantage API.
@@ -22,18 +24,9 @@ def get_raw_data(company = None, symbol = None):
             print('Error: could not get the symbol of company: ' + company)
             exit()
 
-    # url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='+ symbol + '&apikey=' + apiKey
-    # r = requests.get(url)
-    # data = r.json()
-    # file = json.dumps(data)
-    # f2 = open(company + '.json', 'w')
-    # f2.write(file)
-    # f2.close()
-
-    f = open(company + '.json', 'r')
-    content = f.read()
-    data = json.loads(content)
-    f.close()
+    url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='+ symbol + '&apikey=' + apiKey
+    r = requests.get(url)
+    data = r.json()
 
     try: 
         current_date = data['Meta Data']['3. Last Refreshed']
@@ -57,9 +50,9 @@ Returns:
 """
 def init_db():
     # connect to mysql server
-    conn = pymysql.connect(host='localhost',
+    conn = pymysql.connect(host='database',
                      user='root',
-                     password='261512335',
+                     password= os.environ.get("DB_PASSWORD"),
                      database=None)
     
     cursor = conn.cursor()
@@ -74,17 +67,19 @@ def init_db():
 
 if __name__ == "__main__":
     # get the apiKey for retrieving data
-    apiKey = os.environ.get('APIKEY')
-    apiKey = 'HLTXUP1C9N691EYM'
+    load_dotenv(dotenv_path='.env')
+    apiKey = os.environ.get('API_KEY')
     if apiKey is None:
         print("your aipKey is not set.")
         exit()
 
+    # initial database, create table
+    conn, cursor = init_db()
+
     # get the data for each company
     ibm_data = get_raw_data("IBM", "IBM")
     apple_data = get_raw_data("Apple Inc", "AAPL")
-    # initial database, create table
-    conn, cursor = init_db()
+
 
     # insert the records into the financial_data table
     for data in [ibm_data, apple_data]:

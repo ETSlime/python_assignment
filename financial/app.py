@@ -1,8 +1,17 @@
-from flask import Flask
-app = Flask(__name__) 
+from flask import Flask, request
+from api import get_financial_data, get_statistics_data
+
+app = Flask(__name__)
+
 @app.route('/')
 def hello():
-    return 'hello docker&flask'
+    return "hello from flask"
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+@app.route('/api/financial_data')
+def get_data():
+    return get_financial_data(request.args)
+    
+@app.route('/api/statistics')
+def get_statistics():
+    return get_statistics_data(request.args)
+    
