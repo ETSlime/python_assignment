@@ -1,5 +1,4 @@
-# Python Assignment-Yibin Xia
-
+# Python Assignment
 This project retrives data from AlphaVantage, store processed data into local database, and provides backend APIs for query.
 
 ## Tech stack
@@ -37,10 +36,10 @@ curl -X GET 'http://localhost:5000/api/financial_data?start_date=2023-01-01&end_
 
 ```
 parameters:
-    start_date(optional)
-    end_date(optional)
-    symbol(optional)
-    limit(optional, default 5)
+-    start_date(optional)
+-    end_date(optional)
+-    symbol(optional)
+-    limit(optional, default 5)
 
 
 use the following command to calcuate the statistics on the data in given period of time
@@ -49,9 +48,9 @@ curl -X GET 'http://localhost:5000/api/statistics?start_date=2023-01-01&end_date
 
 ```
 parameters:
-    start_date(required)
-    end_date(required)
-    symbol(required)
+-    start_date(required)
+-    end_date(required)
+-    symbol(required)
 
 
 ## How to maintain the API key
